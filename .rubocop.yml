@@ -1,0 +1,19 @@
+AllCops:
+  TargetRubyVersion: 3.0.3
+  NewCops: enable
+
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: never
+
+Style/WordArray:
+  Enabled: true
+  EnforcedStyle: brackets
+
+convention:Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
