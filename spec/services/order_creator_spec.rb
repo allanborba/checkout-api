@@ -16,7 +16,6 @@ describe OrderCreator do
   let(:discont_coupon) { create(:discont_coupon) }
   let(:cupon_id) { discont_coupon.id }
   let(:cpf) { "20887225055" } # valid cpf
-  let(:cpf_sanatize_mock) { instance_double(CpfSanatizerAndValidator) }
 
   describe "#perform" do
     context "when products are valid" do
@@ -25,7 +24,6 @@ describe OrderCreator do
         expect(Order.last.order_product_lists.order(:id).pluck(:product_id)).to eq(products.pluck(:id))
         expect(Order.last.order_product_lists.order(:id).pluck(:product_quantity)).to eq(hash_products.values)
         expect(Order.last.discont_coupon_id).to eq(cupon_id)
-        expect(cpf_sanatize_mock).to have_received(:perform).once
       end
     end
 
@@ -39,17 +37,20 @@ describe OrderCreator do
 
       it { expect { order }.to raise_error(ArgumentError, "Quantity must be greathr than one") }
     end
-
     context "when the product id does not exist" do
       let(:hash_products) { { products[0].id => 1, products[1].id => 1, "invalid_id" => 3 } }
 
       it { expect { order }.to raise_error(ArgumentError, "Non-existent product id") }
     end
-
     context "when the cupon id does not exist" do
       let(:cupon_id) { "1" }
 
       it { expect { order }.to raise_error(ArgumentError, "Non-existent cupon id") }
+    end
+    context "when the cpf is invalid id does not exist" do
+      let(:cpf) { "invalid_cpf" }
+
+      it { expect { order }.to raise_error(ArgumentError, "CPF invalid")  }
     end
   end
 end
