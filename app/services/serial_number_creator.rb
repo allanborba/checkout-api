@@ -9,7 +9,7 @@ class SerialNumberCreator
   def perform
     return "#{Date.today.year}00000001" unless same_year?
 
-    last_serial_number_year + add_zero_digits + new_digit
+    (last_serial_number.to_i + 1).to_s
   end
 
   private
@@ -21,22 +21,6 @@ class SerialNumberCreator
   end
 
   def same_year?
-    last_serial_number_year == Date.today.year.to_s
-  end
-
-  def last_serial_number_year
-    last_serial_number[0, 4]
-  end
-
-  def new_digit
-    (last_serial_number[4...].to_i + 1).to_s
-  end
-
-  def digits_counter
-    new_digit.size
-  end
-
-  def add_zero_digits
-    "0" * (8 - digits_counter)
+    last_serial_number[0, 4] == Date.today.year.to_s
   end
 end
