@@ -25,14 +25,14 @@ RSpec.describe Order do
     end
 
     context "when discount coupon is invalid" do
-      let(:discont_coupon) { create(:discont_coupon, still_valid: false) }
+      let(:discont_coupon) { create(:discont_coupon, expiration_date: Date.today - 1.day) }
       let(:cupon_id) { discont_coupon.id }
 
       it { expect(order.discont_value).to eq(0) }
     end
 
     context "when discount coupon is valid" do
-      let(:discont_coupon) { create(:discont_coupon, still_valid: true, discont: 0.4) }
+      let(:discont_coupon) { create(:discont_coupon, expiration_date: Date.today, discont: 0.4) }
       let(:cupon_id) { discont_coupon.id }
 
       it { expect(order.discont_value).to eq(60 * 0.4) }

@@ -21,7 +21,7 @@ class Order < ApplicationRecord
   private
 
   def discont_coupon_value
-    @discont_coupon_value ||= discont_coupon&.still_valid ? discont_coupon.discont : 0
+    @discont_coupon_value ||= discont_coupon&.still_valid? ? discont_coupon.discont : 0
   end
 
   def product_freight_calculator(list, delivery_distance)
