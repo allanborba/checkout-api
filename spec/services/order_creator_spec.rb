@@ -16,6 +16,11 @@ describe OrderCreator do
   let(:discont_coupon) { create(:discont_coupon) }
   let(:cupon_id) { discont_coupon.id }
   let(:cpf) { "20887225055" } # valid cpf
+  let(:last_serial_number) { "202300000008" } # valid serial number
+
+  before do
+    allow(Order).to receive(:maximum).and_return(last_serial_number)
+  end
 
   describe "#perform" do
     context "when products are valid" do
@@ -47,10 +52,15 @@ describe OrderCreator do
 
       it { expect { order }.to raise_error(ArgumentError, "Non-existent cupon id") }
     end
-    context "when the cpf is invalid id does not exist" do
+    context "when the cpf is invalid" do
       let(:cpf) { "invalid_cpf" }
 
       it { expect { order }.to raise_error(ArgumentError, "CPF invalid")  }
+    end
+    context "when the last serial number is invalid" do
+      let(:last_serial_number) { nil }
+
+      it { expect { order }.to raise_error(ArgumentError, "Last serial must be a String")  }
     end
   end
 end

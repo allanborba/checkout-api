@@ -2,7 +2,7 @@ class OrderCreator
   def perform(cpf, products, cupon_id = nil)
     validate_products(products)
     validate_cupon(cupon_id) if cupon_id
-    order = Order.create(cpf: valid_cpf(cpf), discont_coupon_id: cupon_id)
+    order = Order.create(cpf: valid_cpf(cpf), discont_coupon_id: cupon_id, serial_number: serial_number)
     create_order_product_lists(products, order)
   end
 
@@ -24,6 +24,11 @@ class OrderCreator
 
   def validate_cupon(cupon_id)
     raise ArgumentError, "Non-existent cupon id" if DiscontCoupon.where(id: cupon_id).blank?
+  end
+
+  def serial_number
+    last_serial_number = Order.maximum(:serial_number)
+    SerialNumberCreator.new(last_serial_number).perform
   end
 
   def valid_cpf(cpf)

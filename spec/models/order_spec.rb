@@ -5,7 +5,8 @@ RSpec.describe Order do
 
   let(:cupon_id) { nil }
   let(:cpf) { "208.872.250-55" }
-  let(:order) { described_class.create(cpf: cpf, discont_coupon_id: cupon_id) }
+  let(:serial_number) { "202300000008" }
+  let(:order) { described_class.create(cpf: cpf, discont_coupon_id: cupon_id, serial_number: serial_number) }
 
   before do
     [
