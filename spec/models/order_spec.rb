@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Order do
-  let!(:products) do
-    [create(:product, unit_price: 5), create(:product, unit_price: 10), create(:product, unit_price: 15)]
-  end
+  let!(:products) { [create_product(5), create_product(10), create_product(15)] }
 
   let(:cupon_id) { nil }
   let(:cpf) { "208.872.250-55" }
@@ -40,4 +38,26 @@ RSpec.describe Order do
       it { expect(order.discont_value).to eq(60 * 0.4) }
     end
   end
+
+  describe "#freight_cost" do
+    context "when the freight value is not minimum" do
+      let(:delivery_distance) { 1000 }
+      let(:products_volume) { 1 * 0.2 * 0.1 } # widht * height * depth
+      let(:products_density) { 10 / products_volume } # weight / volume
+      let(:result) { 5 * products_volume * products_density / 100 * delivery_distance } # number_of_products * freight formula
+
+      it { expect(order.freight_cost(delivery_distance)).to eq(result) }
+    end
+  end
+end
+
+def create_product(unit_price = 5)
+  create(
+    :product,
+    unit_price: unit_price,
+    width: 1.0,
+    height: 0.2,
+    depth: 0.1,
+    weight: 10
+  )
 end
