@@ -36,8 +36,9 @@ class OrderCreator
   end
 
   def create_order_product_lists(products, order)
-    products.each do |id, quantity|
-      OrderProductList.create(product_id: id, product_quantity: quantity, order_id: order.id)
+    products_list_attr = products.map do |id, quantity|
+      OrderProductList.new(product_id: id, product_quantity: quantity, order_id: order.id)
     end
+    OrderProductList.import(products_list_attr)
   end
 end
