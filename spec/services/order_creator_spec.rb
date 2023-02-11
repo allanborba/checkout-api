@@ -15,13 +15,8 @@ describe OrderCreator do
 
   let(:discont_coupon) { create(:discont_coupon) }
   let(:cupon_id) { discont_coupon.id }
-  let(:cpf) { "valid_cpf" }
+  let(:cpf) { "20887225055" } # valid cpf
   let(:cpf_sanatize_mock) { instance_double(CpfSanatizerAndValidator) }
-
-  before do
-    allow(CpfSanatizerAndValidator).to receive(:new).and_return(cpf_sanatize_mock)
-    allow(cpf_sanatize_mock).to receive(:perform).and_return("valid_cpf")
-  end
 
   describe "#perform" do
     context "when products are valid" do
